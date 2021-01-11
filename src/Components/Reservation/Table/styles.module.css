@@ -1,0 +1,87 @@
+.TableRoot {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  min-height: 70px;
+  justify-content: center;
+  user-select: none;
+}
+.TableRoot[selected="true"] {
+  background-color: blue;
+  color: white 
+}
+
+.TableRoot[data-status="AVAILABLE"] {
+  cursor: pointer;  
+}
+
+.TableRoot[data-status="AVAILABLE"]:hover .Table {
+  background-color: thistle;
+  border-color: tomato;
+}
+
+.TableRoot[data-orientation="H"] {
+  flex-direction: row;
+  min-width: 70px;
+  align-items: center;  
+}
+
+.ChairRow {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 10px;
+  margin: 5px 0
+}
+.TableRoot[data-orientation="H"] .ChairRow {
+  flex-direction: column;
+  height: 100%;
+  width: 10px;
+  margin: 0 5px
+}
+
+.Chair {
+  width: 40px;
+  height: 100%;
+  background-color: rgb(230, 241, 228);
+  border-radius: 20px;
+}
+.TableRoot[data-orientation="H"] .Chair {
+  height: 40px;
+  width: 100%;
+}
+
+.Chair[data-occupied="true"] {
+  background-color: black
+}
+
+.Chair[data-nonexist="true"] {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.Table {
+  height: 100%;
+  width: 60px;
+  border: 2px solid blue;
+  background-color: white;
+  border-radius: 10px;
+  font-size: 18px;
+  color: blue;
+}
+.TableRoot[data-orientation="H"] .Table {
+  width: 100%;
+  height: 60px;  
+}
+.TableRoot[data-selected="true"] .Table {
+  background-color: rgb(36, 124, 240);
+  color: white
+}
+.TableRoot[data-status="MISFIT"] .Table, .TableRoot[data-status="UNKNOWN"] .Table {
+  border-color: cadetblue;
+  color:cadetblue
+}
+.TableRoot[data-status="OCCUPIED"] .Table {
+  border-color: black;
+  color: black
+}

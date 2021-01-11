@@ -1,0 +1,42 @@
+.GuestCard {
+  padding: 10px;
+  background-color: grey;
+  color: white;
+  height: 60px;
+}
+
+.GuestCard[data-vertical="true"] {
+  width: 150px;
+  height: 220px;
+}
+
+.GuestInfoLine>span {
+  margin-right: 10px;
+}
+
+.NearbyIcon {
+  width: 15px;
+  height: 15px;
+}
+
+.GuestInfoSecondLine>span:first-of-type {
+  color:rgb(91, 195, 199)
+}
+
+.GuestCard[data-vertical="true"] .GuestInfoSecondLine {
+  font-size: 14px;
+}
+
+.GuestPhoto {
+  height: 100%;
+  width: 50px;
+}
+.GuestPhoto svg {
+  width: 100%;
+  height: 100%;
+}
+
+.GuestCard[data-vertical="true"] .GuestPhoto {
+  width: calc(100% - 20px);
+  height: 100px;
+}

@@ -1,0 +1,10 @@
+.ButtonClose {
+  color: white; 
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ButtonClose:hover {
+  color: lightgray;
+}

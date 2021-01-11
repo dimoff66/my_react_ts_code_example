@@ -1,0 +1,51 @@
+.TablesTabSidebar {
+  width: 40%;
+  padding: 20px;
+  background-color:rgb(221, 206, 186);
+}
+
+.TablesTabMain {
+  padding: 20px 20px 0 20px
+}
+
+.DateButton {
+  font-size: 12px;
+  color: rgb(109, 41, 109);
+  border: solid 1px violet
+}
+
+.DateButtonActive {
+  background-color: rgb(91, 46, 109);
+  color: whitesmoke;
+}
+
+.TimeslotButton {
+  font-size: 16px;
+  color: rgb(109, 41, 109);
+  border-color: transparent;
+  border-bottom: 1px solid rgb(118, 180, 180);
+}
+
+.TimeslotButton[disabled] {
+  border-color: transparent;
+  border-bottom: 1px solid rgb(118, 180, 180);
+}
+
+.TimeslotButtonActive {
+  background-color: rgb(116, 26, 134);
+  color: whitesmoke;
+}
+
+.TablesMapContainer {
+  padding: 50px;
+  background-color: rgb(174, 190, 174);
+  border-radius: 10px
+}
+
+.VenueSelect+input {
+  background-color:ivory
+}
+
+.VenueSelectIcon[class*="MuiSelect-icon"] {
+  color: rgb(196, 252, 144)
+}

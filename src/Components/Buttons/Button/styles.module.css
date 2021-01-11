@@ -1,0 +1,65 @@
+.Button {
+  padding: 8px 16px; 
+  font: normal 15px/22px Verdana; 
+  text-transform: uppercase; 
+  color: #E57332;
+  border: 2px solid #E57332;
+  border-radius: 5px;
+  background-color: #fff; 
+  text-align: center; 
+  cursor: pointer;
+  -webkit-user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Button[data-normal="true"] {
+  text-transform: none;
+}
+   
+.Button:not([disabled]):not(.menu):not(.link):hover {
+  color: #fff;
+  background-color: rgba(201, 206, 211, 0.808); 
+}
+
+.Button * {
+  cursor: pointer;
+}
+   
+.Button:active:not([disabled], .menu, .link) {
+  color: #fff; 
+  background-color: #FF813A; 
+  border-color: #FF813A; 
+}
+
+.Button.link {
+  background-color: transparent;
+  border: none;
+  color: blueviolet;
+  padding: 2px;
+  display: inline;
+}
+.Button.link:hover {
+  color: gray
+}
+
+.Button.menu {
+  background-color: transparent;
+  border: none;
+  color: white
+}
+.Button.menu:hover {
+  color: rgb(240, 209, 209)
+}
+
+.Button[disabled] {
+  color: rgba(128, 128, 128, 0.322);
+  border-color: rgba(128, 128, 128, 0.322);
+}
+
+.Button[data-noborder="true"] {
+  border-color: transparent;
+}
+
+

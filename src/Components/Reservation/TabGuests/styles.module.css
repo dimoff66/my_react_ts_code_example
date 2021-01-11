@@ -1,0 +1,45 @@
+.GuestsSidebar {
+  width: 30%;
+  min-width: 200px;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: burlywood;
+}
+
+.GuestsSearchListBlock {
+  margin: 0 30px;
+}
+
+.GuestsSearchActionArea {
+  height: 30px;
+  padding: 10px 0
+}
+
+.GuestsSearchList {
+  /* width: 400px; */
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.GuestCard {
+  border-bottom: black solid 2px;
+}
+
+.AnonimousGuestsButton {
+  font-size: 20px;
+  padding: 10px;
+}
+
+.AnonimousGuestsLabel {
+  font-size: 20px;
+}
+
+.SearchInput, .SearchInput:focus {
+  height: 25px;
+  padding: 2px 9px;
+  border-radius: 2px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border: none;
+  border-bottom: 2px green solid;
+}

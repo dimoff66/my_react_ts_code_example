@@ -1,0 +1,114 @@
+.FlexRow {
+  display: flex;
+  flex-flow: row;
+}
+
+.FlexColumn {
+  display: flex;
+  flex-flow: column;
+}
+
+.Grow {
+  flex-grow: 1
+}
+
+.NoShrink {
+  flex-shrink: 0
+}
+
+.ScrollableV, .Scrollable {
+  overflow-y: scroll;
+}
+
+.ScrollableH, .Scrollable {
+  overflow-x: scroll;
+}
+
+.ScrollableH::-webkit-scrollbar, .Scrollable::-webkit-scrollbar {
+  height: 6px;    
+}
+.ScrollableV::-webkit-scrollbar, .Scrollable::-webkit-scrollbar {
+  width: 6px;    
+}
+
+.ScrollableH::-webkit-scrollbar-track, 
+.ScrollableV::-webkit-scrollbar-track,
+.Scrollable::-webkit-scrollbar-track
+{
+  background: transparent;  
+}
+
+.ScrollableH:hover::-webkit-scrollbar-track, 
+.ScrollableV:hover::-webkit-scrollbar-track,
+.Scrollable:hover::-webkit-scrollbar-track
+{
+  background: rgba(219, 216, 223);  
+}
+
+.ScrollableH::-webkit-scrollbar-thumb, 
+.ScrollableV::-webkit-scrollbar-thumb, 
+.Scrollable::-webkit-scrollbar-thumb 
+{
+  background-color: transparent;    /* color of the scroll thumb */
+  border-radius: 15px;       /* roundness of the scroll thumb */
+  border: 1px solid transparent;  /* creates padding around scroll thumb */
+}
+
+.ScrollableH:hover::-webkit-scrollbar-thumb, 
+.ScrollableV:hover::-webkit-scrollbar-thumb,
+.Scrollable:hover::-webkit-scrollbar-thumb
+{
+  background-color: rgb(92, 90, 92);   
+  border-color: rgb(29, 40, 197);
+}
+
+
+.AlignCenter {
+  align-items: center;
+}
+
+.JustifyCenter {
+  justify-content: center;
+}
+
+.ContentCenter {
+  align-items: center;
+  justify-content: center;
+}
+
+.JustifyCenter {
+  justify-content: center;
+}
+
+.FullWidth {
+  width: 100%
+}
+
+.FullHeight {
+  height: 100%
+}
+
+.FullWindow {
+  width: 100%;
+  height: 100%;
+}
+
+.FullWidth, .FullHeight, .FullWindow {
+  box-sizing: border-box;
+}
+
+.PosAbsolute {
+  position: absolute;
+}
+
+.PosRelative {
+  position: relative;
+}
+
+.OverflowVHidden {
+  overflow-y: hidden
+}
+
+.OverflowHHidden {
+  overflow-x: hidden
+}
