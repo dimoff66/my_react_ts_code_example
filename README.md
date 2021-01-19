@@ -1,4 +1,5 @@
-Here is an example of my #React-Redux-Typescript code. 
+## Here is an example of my React-Redux-Typescript code. 
+
 It was a part of real project, but this version is simplified due to signed NDA
 
 But still it shows most of my abilities to create complex applications using technologies mentioned above
