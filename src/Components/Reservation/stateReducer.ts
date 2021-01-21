@@ -83,16 +83,16 @@ const reducer: Reducer<ReservationComponentState, Action> = (state, action): Res
         
       if (isChanged(ACTIVE_GUESTS_SEARCH_TAB_PROP, GUESTS_SEARCH_TEXT_PROP) || 
         isEmpty(GUESTS_LIST_PROP)) {
-          const res = getGuestsList(context)
-          setProp(GUESTS_LIST_PROP)(res)
+          setProp(GUESTS_LIST_PROP)(getGuestsList(context))
       }
 
-      if (isChanged(ACTIVE_GUESTS_SEARCH_TAB_PROP) || isEmpty(GUESTS_LIST_PROP)) {
-        setProp(GUESTS_LIST_PROP)(getGuestsList(context))
-      }
-
-      if (isEmpty(CURRENT_LAYOUT_PROP) || isChanged(CURRENT_VENUE_PROP)) {
+      if (isChanged(CURRENT_VENUE_PROP)) {
+        setEmpty(CURRENT_LAYOUT_PROP)
+        setEmpty(CURRENT_TIMESLOT_PROP)
         setReservationProp(TABLE_PROP, null)
+      }
+
+      if (isEmpty(CURRENT_LAYOUT_PROP)) {
         setProp(CURRENT_LAYOUT_PROP)(getDefaultLayout(context))
       }
 

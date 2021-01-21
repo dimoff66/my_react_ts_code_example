@@ -107,9 +107,7 @@ const Reservation: React.FC<Props> = (props: Props) => {
 
   const changeActiveTab = (tab: ComponentTab) => changeState(ACTIVE_TAB_PROP)(tab)
 
-  const onCloseHandler = useCallback(() => {
-    props.changeReservation(null)
-  }, [])
+  const onCloseHandler = () => { props.changeReservation(null) }
 
   const saveReservationHandler = useCallback(() => {
     if (!reservation.validate()) return 

@@ -124,9 +124,8 @@ class BasicClass<
   }
 
   protected getTimeValue (fieldName: keyof T1): TimeTrio {
-    const value: string = this.getValue(fieldName) || ''
-    const [hourRaw = 0, minute = 0, second = 0] = 
-      value.split(':').map(v => v[0] === '0' ? v[1] : v).map(Number)
+    const value = this.getStringValue(fieldName)
+    const [hourRaw = 0, minute = 0, second = 0] = value.split(':').map(Number)
 
     const hour = hourRaw + (hourRaw < 4 ? 24 : 0)
 
@@ -149,8 +148,8 @@ class BasicClass<
     return last(this.data[fieldName] || [])
   }
 
-  protected setValue <K extends StringKeyOf<T1>>(fieldName: K, value: T1[K], removeExtraData = false) { 
-    if (removeExtraData) {
+  protected setValue <K extends StringKeyOf<T1>>(fieldName: K, value: T1[K], removeRelatedObject = false) { 
+    if (removeRelatedObject) {
       const extraFieldName = this.findExtraField(fieldName)
       if (extraFieldName)
         delete this.extraFieldsMap[extraFieldName]
@@ -158,18 +157,20 @@ class BasicClass<
 
     type OnChangeHandler = (v: T1[K]) => undefined | false
 
+    // check if field has onChangeHandler
     const onChangeHandlerName = fieldName + 'OnChange'
     const onChangeHandler = onChangeHandlerName in this
       ? 
         <FK extends keyof this>(handlerName: FK) => 
           (this[handlerName] as this[FK] & OnChangeHandler).bind(this)
       : null
-      
-          
-    const onChangeHandlerCallRes = onChangeHandler && 
+     
+    // call hadler if exists
+    const onChangeHandlerCallResult = onChangeHandler && 
       onChangeHandler(onChangeHandlerName as keyof this)(value)
 
-    if (onChangeHandlerCallRes === false) return this
+    // if handler returned fakse then we cancel changing
+    if (onChangeHandlerCallResult === false) return this
 
     this.data[fieldName] = value 
     return this.setModified() 
@@ -265,7 +266,7 @@ class BasicClass<
 
     if (justOne) {
       const index = list.findIndex(fn)
-      if (index >= 0) list.splice(index, 1)
+      if (index >= 0) list = list.filter((v, i) => i !== index)
     } else {
       list = list.filter(v => !fn(v))
     }
@@ -288,12 +289,11 @@ class BasicClass<
     if (!isClassItems(list)) return this
 
     const index = list.findIndex(fn)
-    if (index >= 0) 
-      list.splice(index, 1, newObject)
-    else 
-      list.push(newObject)
+    const newList = index >= 0 
+      ? Object.assign([...list], { [index]: newObject })
+      : [...list, newObject]
 
-    return this.setExtraDataValue(fieldName, list)
+    return this.setExtraDataValue(fieldName, newList)
   }
 
   public setExtraData (props: ExtraData<T2>) {
@@ -337,7 +337,6 @@ class BasicClass<
 
     return value || null
   }
-
 
   public getDataObjectsFromSource <T extends ClassData>(fieldName: keyof T1, sourceName?: string) {
     let value: T[] = []
@@ -427,9 +426,7 @@ export class ExtraField<
   
   private getInstance ( itemData: FieldType) {
     return this.context.convertToInstance(itemData, this.creator, this.getParentData(this.context)) 
-  }
-
-  
+  } 
 }
 
 export default BasicClass

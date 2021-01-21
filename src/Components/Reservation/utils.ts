@@ -224,9 +224,11 @@ export const getLayoutTablesProps =
     const isReservationTable = table.isEqual(reservationTable)
     const reservations = reservationsMap?.[table.id!] || []
 
-    if (isReservationTable && 
-      !reservations.find(item => item.isEqual(reservation))) {
-        reservations.push(reservation!)
+    const currentReservationIndex = reservations.findIndex(item => item.isEqual(reservation))
+    if (isReservationTable && currentReservationIndex < 0) {
+      reservations.push(reservation!)
+    } else if (!isReservationTable && currentReservationIndex > -1) {
+      reservations.splice(currentReservationIndex, 1)
     }
 
     const isSelected = isReservationTable
