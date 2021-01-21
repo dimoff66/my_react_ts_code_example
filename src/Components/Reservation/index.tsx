@@ -1,22 +1,26 @@
+// react
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react'
 import { connect } from 'react-redux'
-import _ from 'lodash'
-import { joinStyles } from '../StyledElement'
 
+// component helpers
+import createContextObject, { mapDispatchToProps, mapStateToProps, Props } from './context'
+import stateReducer from './stateReducer'
+import { fetchReservations, getTableTabLabel } from './utils'
+
+// helpers
+import _ from 'lodash'
+
+// components
 import TabGuests from './TabGuests'
 import TabTables from './TabTables'
 import { FlexColumn, FlexRow } from '../FlexContainer'
 import Button from '../Buttons/Button'
 import ButtonClose from '../Buttons/ButtonClose'
 
-import { ACTION_SET_ATTRIBUTE, ACTIVE_TAB_PROP, RESERVATIONS_LIST_PROP,
-  IS_INITIALIZED_PROP, ShowAvailabilityMode, ComponentTab, GuestsListTab, 
-  } from './constants'
-
-import componentStyles from './styles.module.css'
-import { fetchReservations, getTableTabLabel } from './utils'
+// server connection
 import agent from '../../Utils/agent'
-import stateReducer from './stateReducer'
+
+// types
 import { MomentType } from '../../Classes/Moment'
 import { GuestType } from '../../Classes/Guest'
 import { SessionsType } from '../../Classes/Sessions'
@@ -24,10 +28,19 @@ import { SessionType } from '../../Classes/Session'
 import { VenueType } from '../../Classes/Venue'
 import { LayoutType } from '../../Classes/Layout'
 import { ReservationType, WritableReservationProps } from '../../Classes/Reservation'
-import createContextObject, { mapDispatchToProps, mapStateToProps, Props } from './context'
 
+
+// constants
+import { ACTION_SET_ATTRIBUTE, ACTIVE_TAB_PROP, RESERVATIONS_LIST_PROP,
+  IS_INITIALIZED_PROP, ShowAvailabilityMode, ComponentTab, GuestsListTab, 
+  } from './constants'
+
+// styles
+import componentStyles from './styles.module.css'
+import { joinStyles } from '../StyledElement'
 const styles = joinStyles(componentStyles, { TabActive: 'Tab' })
 
+// local constants
 const initialState = (reservation: ReservationType): ReservationComponentState => ({
   activeTab: ComponentTab.Guests,
   currentDateTime: reservation.sailing.getCurrentTime(),
@@ -40,6 +53,7 @@ const initialState = (reservation: ReservationType): ReservationComponentState =
   availabilityMode: ShowAvailabilityMode.byVenue
 })
 
+// local types
 export interface ReservationComponentState {
   isInitialized?: boolean
 
@@ -73,6 +87,8 @@ export type ChangeStateCallback = <K1 extends CKey, K2 extends CKey, K3 extends 
 
 type CKey = keyof ChangableValues
 
+///////////////////////////////////////////////////////////
+// Component
 const Reservation: React.FC<Props> = (props: Props) => {
   ////////////////////////////////////////////////////
   // INITIAL STATE PREPARATION
@@ -80,9 +96,13 @@ const Reservation: React.FC<Props> = (props: Props) => {
   const [state, dispatch] = useReducer(stateReducer, initialStateValue)
   console.log('props: ', props)
 
+  ////////////////////////////////////////////////////////////
+  // context values initialization
   const context = useMemo(() => createContextObject(props, state), [props, state])
-  const reservation = context.reservation as ReservationType
+  const reservation = context.reservation!
 
+  ///////////////////////////////////////////////////////
+  // handlers
   const changeState = useCallback(
     <K1 extends keyof ChangableValues, K2 extends keyof ChangableValues, K3 extends keyof ChangableValues> 
     (key1: K1, key2?: K2, key3?: K3) => 
@@ -109,19 +129,19 @@ const Reservation: React.FC<Props> = (props: Props) => {
 
   const onCloseHandler = () => { props.changeReservation(null) }
 
-  const saveReservationHandler = useCallback(() => {
+  const saveReservationHandler = () => {
     if (!reservation.validate()) return 
 
     agent.saveReservation(reservation.getData()).then(id => {
       const updatedReservation = reservation.update({ id }, false)
       props.changeReservation(updatedReservation)
     }) 
-  }, [reservation])
+  }
 
   /////////////////////////////////////////
   // effects
 
-  // state props initialization
+  // --- state props initialization ------
   useEffect(
     () => {
       if (!context.isInitialized) {
@@ -132,7 +152,7 @@ const Reservation: React.FC<Props> = (props: Props) => {
     [context.isInitialized]
   )
 
-  // load reservations
+  // --- load reservations ------------------
   useEffect(() => {
     if (!context.reservationsList && context.date) {
       fetchReservations(context).then(changeState(RESERVATIONS_LIST_PROP))
@@ -146,8 +166,9 @@ const Reservation: React.FC<Props> = (props: Props) => {
   const tabGuestsClass = getTabClass(ComponentTab.Guests)
   const tabTablesClass = getTabClass(ComponentTab.Tables)
 
+  ///////////////////////////////////////////////////
+  // title variables
   const title = !reservation.id ? 'Add new reservation' : 'Edit reservation'
-
   const tableTabLabel = getTableTabLabel(context)
 
   //////////////////////////////////////////////////
@@ -185,7 +206,6 @@ const Reservation: React.FC<Props> = (props: Props) => {
     </FlexColumn>
   )
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reservation)
 
