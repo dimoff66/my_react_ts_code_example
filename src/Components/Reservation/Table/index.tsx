@@ -29,7 +29,7 @@ const Table: FunctionComponent<Props> = props => {
   const pairs = Array.from({ length }, (v, i) => {
     const ind = (i + 1) * 2
     const nonExists = [false, ind > tableSize]
-    const occupied = [ind - 1 <= partySize, ind < partySize]
+    const occupied = [ind - 1 <= partySize, ind <= partySize]
 
     return { nonExists, occupied }
   })

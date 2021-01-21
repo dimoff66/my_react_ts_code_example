@@ -1,68 +1,105 @@
-import React, { ChangeEvent, FunctionComponent, SyntheticEvent } from 'react'
-import Button from '../../Buttons/Button'
+import React, { ChangeEvent, FunctionComponent, SyntheticEvent, useCallback, useEffect, useMemo, useRef } from 'react'
+
+// components
+import GuestCard from '../GuestCard'
 import { FlexColumn, FlexRow } from '../../FlexContainer'
+import Button from '../../Buttons/Button'
 import InfoBlock from '../../InfoBlock'
 import Menu from '../../Menu'
 import Tabs from '../../Tabs'
-
-import { ReservationComponentContext } from '../context'
-
-import { ACTIVE_GUESTS_SEARCH_TAB_PROP, ANONIMOUS_GUESTS_COUNT_PROP, GuestsListTab, GUESTS_SEARCH_TAB_ALL, GUESTS_SEARCH_TAB_NEARBY, GUESTS_SEARCH_TAB_PARTY, GUESTS_SEARCH_TEXT_PROP } from '../constants'
-import GuestCard from '../GuestCard'
-import styles from './styles.module.css'
-import { ReservationType } from '../../../Classes/Reservation'
-import { GuestType } from '../../../Classes/Guest'
-import { Dict } from '../../../CommonTypes'
-import { ChangeStateCallback } from '..'
 import NumericInput from '../../NumericInput'
 
+// imported types
+import { Dict } from '../../../CommonTypes'
+import Reservation, { ChangeStateCallback } from '..'
+import { ReservationComponentContext } from '../context'
+import { ReservationType } from '../../../Classes/Reservation'
+import { GuestType } from '../../../Classes/Guest'
+
+// constants
+import { ACTIVE_GUESTS_SEARCH_TAB_PROP, ANONIMOUS_GUESTS_COUNT_PROP, GuestsListTab, GUESTS_SEARCH_TEXT_PROP } from '../constants'
+
+// styles
+import styles from './styles.module.css'
+const searchListElementStyle = { marginRight: 5, marginBottom: 5 }
+
+// local types
 type Props = {
   context: ReservationComponentContext,
   changeState: ChangeStateCallback
 }
 
-const searchListElementStyle = { marginRight: 5, marginBottom: 5 }
+type ValuesHolder = Props & 
+  Pick<ReservationComponentContext, 'reservation' | 'nearbyGuestsIdsSet'>
 
+// local constants
+const tabs = [
+  [GuestsListTab.Nearby, 'Nearby'],
+  [GuestsListTab.Party, 'Party'],
+  [GuestsListTab.Search, 'Search'],
+]
+
+/////////////////////////////////////////////////////////////////////
+// COMPONENT
 const TabGuests: FunctionComponent<Props> = ({ context, changeState }) => {
   const { reservation, mainGuest, reservationGuests, guestsList, 
     activeGuestsSearchTab, nearbyGuestsIdsSet, guestsSearchText } = context
+
+  // values holder is created to use values without changing handlers
+  // since we can call its properties
+  const valuesHolder: ValuesHolder = useMemo(
+    () => ({ reservation, context, changeState, nearbyGuestsIdsSet }), []
+  )
+  Object.assign(valuesHolder, { reservation, context, changeState })
+
+  /////////////////////////////////////////////////////////
+  // hooks
+  const searchInput = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    if (activeGuestsSearchTab === GuestsListTab.Search && searchInput.current) {
+      (searchInput.current! as HTMLInputElement).focus()
+    }
+  }, [activeGuestsSearchTab])
   
-  const changeSearchTab = (tab: GuestsListTab) => {
-    changeState(ACTIVE_GUESTS_SEARCH_TAB_PROP)(tab)
-  }
+  //////////////////////////////////////////////////////////
+  // handlers
+  const changeSearchTab = useCallback((tab: GuestsListTab) => {
+    valuesHolder.changeState(ACTIVE_GUESTS_SEARCH_TAB_PROP)(tab)
+  }, [])
 
-  const guestsSearchTextChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    changeState(GUESTS_SEARCH_TEXT_PROP)(e.target.value)
-  }
+  const guestsSearchTextChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    valuesHolder.changeState(GUESTS_SEARCH_TEXT_PROP)(e.target.value)
+  }, [])
 
-  const changeAnonimousGuestsCount = (newValue: number) => {
-    changeState(ANONIMOUS_GUESTS_COUNT_PROP)(newValue)
-  }
-    
-  const changeReservation = (item: ReservationType) => {
-    context.props.changeReservation(item.update())
-  }
+  const changeAnonimousGuestsCount = useCallback((newValue: number) => {
+    valuesHolder.changeState(ANONIMOUS_GUESTS_COUNT_PROP)(newValue)
+  }, [])
 
-  const addPartyHandler = () => {
-    changeReservation(reservation!.addToParty(...guestsList))
-  }
+  /////////////////////////////////////////////////////////////
+  // change reservation handlers  
+  const changeReservation = useCallback((item: ReservationType) => {
+    valuesHolder.context.props.changeReservation(item.update())
+  }, [])
 
-  const addGuestFn = (guest: GuestType) => () => 
-    changeReservation(reservation!.addToParty(guest))
+  const addPartyHandler = useCallback(() => {
+    changeReservation(valuesHolder.reservation!.addToParty(...guestsList))
+  }, [changeReservation])
 
-  const deleteGuestFn = (guest: GuestType) => () => 
-    changeReservation(reservation!.removeFromParty(guest))
+  const addGuestFn = useCallback((guest: GuestType) => () => {
+    changeReservation(valuesHolder.reservation!.addToParty(guest))
+  }, [changeReservation])
 
-  const changeMainGuestFn = (guest: GuestType) => () => 
-    changeReservation(reservation!.replaceMainGuest(guest))
+  const deleteGuestFn = useCallback((guest: GuestType) => () => {
+    changeReservation(valuesHolder.reservation!.removeFromParty(guest))
+  }, [changeReservation])
 
-  const tabs = [
-    [GuestsListTab.Nearby, 'Nearby'],
-    [GuestsListTab.Party, 'Party'],
-    [GuestsListTab.Search, 'Search'],
-  ]
+  const changeMainGuestFn = useCallback((guest: GuestType) => () => {
+    changeReservation(valuesHolder.reservation!.replaceMainGuest(guest))
+  }, [changeReservation]) 
 
-  const GuestCardEl = (elProps: { 
+  /////////////////////////////////////////////////
+  // functions
+  const GuestCardEl = useCallback((elProps: { 
     guest: GuestType, 
     onClick?: () => void, 
     vertical?: boolean, 
@@ -74,47 +111,80 @@ const TabGuests: FunctionComponent<Props> = ({ context, changeState }) => {
     const className = vertical ? styles.GuestCardVertical : styles.GuestCard
 
     let optionsControls 
-    if (addButton) optionsControls = <Button onClick={addGuestFn(guest)}>Add</Button>
-    if (menu) optionsControls = <Menu 
-      items={[
-        { label: 'Remove', onClick: deleteGuestFn(guest) },
-        { label: 'Set as main', onClick: changeMainGuestFn(guest) },
-      ]} 
-    />
-  
-    return (<GuestCard key={guest.id} 
-      vertical={vertical}
-      className={className} 
-      guest={guest} 
-      nearbyGuestsIdsSet={nearbyGuestsIdsSet} 
-      optionsControls={optionsControls}
-      onClick={onClick}
-      style={style}
-    />)
-  }
+    if (addButton) 
+      optionsControls = 
+        <Button onClick={addGuestFn(guest)}>Add</Button>
 
+    else if (menu) 
+      optionsControls = 
+        <Menu 
+          items={[
+            { label: 'Remove', onClick: deleteGuestFn(guest) },
+            { label: 'Set as main', onClick: changeMainGuestFn(guest) },
+          ]} 
+        />
+  
+    return (
+      <GuestCard 
+        key={guest.id} 
+        vertical={vertical}
+        className={className} 
+        guest={guest} 
+        nearbyGuestsIdsSet={valuesHolder.nearbyGuestsIdsSet} 
+        optionsControls={optionsControls}
+        onClick={onClick}
+        style={style}
+      />)
+  }, [addGuestFn, changeMainGuestFn, deleteGuestFn])
+
+  //////////////////////////////////////////////////
+  // Components
+  const reservedForElement = useMemo(() => 
+    <InfoBlock labelTop={'Reserved for'}  NoShrink>
+      <GuestCardEl guest={mainGuest!} />
+    </InfoBlock>
+    
+    , [mainGuest])
+
+  const partyElement = useMemo(() => 
+    <InfoBlock labelTop={'Party'} Grow hideOverflow>
+      <FlexColumn FullHeight ScrollableV className={styles.PartyCards}> 
+        {reservationGuests.map(item => (<GuestCardEl menu guest={item} />))}
+      </FlexColumn>
+    </InfoBlock>
+  
+  , [reservationGuests])
+
+  const anonimousGuestsElement = useMemo(() => 
+    <InfoBlock labelLeft={'Anonimous guests'} NoShrink>
+      <FlexRow ContentCenter>
+        <NumericInput
+          min={0}
+          value={reservation!.anonimousGuestsCount}
+          onChange={changeAnonimousGuestsCount}
+        />
+      </FlexRow>
+    </InfoBlock> 
+  
+  , [reservation?.anonimousGuestsCount, changeAnonimousGuestsCount])
+
+  const guestsSearchList = useMemo(() => 
+    <FlexRow Grow ScrollableV FullWidth className={styles.GuestsSearchList}>
+      {guestsList.map(item => (<GuestCardEl 
+        vertical addButton guest={item} onClick={addGuestFn(item)} 
+        style={searchListElementStyle}
+      />))}
+    </FlexRow>
+  , [guestsList])
+
+  ///////////////////////////////////////////////////////
+  // Component
   return (
     <FlexRow FullWindow OverflowVHidden className={styles.GuestsBlock}>
       <FlexColumn OverflowVHidden FullHeight NoShrink className={styles.GuestsSidebar}> 
-        <InfoBlock labelTop={'Reserved for'}  NoShrink>
-          <GuestCardEl guest={mainGuest!} />
-        </InfoBlock>
-        
-        <InfoBlock labelTop={'Party'} Grow hideOverflow>
-          <FlexColumn FullHeight ScrollableV className={styles.PartyCards}> 
-            {reservationGuests.map(item => (<GuestCardEl menu guest={item} />))}
-          </FlexColumn>
-        </InfoBlock>
-        
-        <InfoBlock labelLeft={'Anonimous guests'} NoShrink>
-          <FlexRow ContentCenter>
-            <NumericInput
-              min={0}
-              value={reservation!.anonimousGuestsCount}
-              onChange={changeAnonimousGuestsCount}
-            />
-          </FlexRow>
-        </InfoBlock> 
+        { reservedForElement }
+        { partyElement }
+        { anonimousGuestsElement }
       </FlexColumn>
       
       <FlexColumn FullHeight Grow className={styles.GuestsSearchListBlock}>
@@ -130,18 +200,14 @@ const TabGuests: FunctionComponent<Props> = ({ context, changeState }) => {
           }
           {activeGuestsSearchTab === GuestsListTab.Search && 
             <input 
+              ref={searchInput}
               placeholder={'type name or cabin number'}
               className={styles.SearchInput} 
               value={guestsSearchText} 
               onChange={guestsSearchTextChangeHandler} />
           }
         </div>
-        <FlexRow Grow ScrollableV FullWidth className={styles.GuestsSearchList}>
-          {guestsList.map(item => (<GuestCardEl 
-            vertical addButton guest={item} onClick={addGuestFn(item)} 
-            style={searchListElementStyle}
-          />))}
-        </FlexRow>
+        { guestsSearchList }
       </FlexColumn>
     </FlexRow>
   )

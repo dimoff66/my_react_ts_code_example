@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@types/lodash": "^4.14.166",
+    "@types/styled-components": "^5.1.7",
     "lodash": "^4.17.20",
     "material-ui-numeric-input": "^1.0.8",
     "moment-timezone": "^0.5.31",
@@ -20,7 +21,8 @@
     "react-redux": "^7.2.1",
     "react-scripts": "3.4.3",
     "redux": "^4.0.5",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "styled-components": "^5.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
