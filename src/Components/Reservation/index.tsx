@@ -122,8 +122,7 @@ const Reservation: React.FC<Props> = (props: Props) => {
         props.changeReservation(reservation.update())
       }
     }, 
-    [context, dispatch]
-  )
+    [context, dispatch])
 
   const changeActiveTab = (tab: ComponentTab) => changeState(ACTIVE_TAB_PROP)(tab)
 
@@ -208,5 +207,3 @@ const Reservation: React.FC<Props> = (props: Props) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reservation)
-
-

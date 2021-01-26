@@ -14,8 +14,8 @@ import { VenueType } from "../../Classes/Venue"
 
 //////////////////////////////////////////
 export const getGuestsList = (context: ReservationComponentContext) => {
-  const reservation     = context.reservation as ReservationType
-  const dataSources     = context.dataSources as DataSourcesCollection
+  const reservation     = context.reservation!
+  const dataSources     = context.dataSources!
   const guestsMap       = context.guestsMap as Dict<GuestDataType>
   const nearbyGuestsIds = context.nearbyGuestsIds as string[]
 
