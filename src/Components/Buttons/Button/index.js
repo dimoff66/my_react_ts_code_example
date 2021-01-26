@@ -1,7 +1,6 @@
-import React from 'react';
+import React from 'react'
+import { convertPropsToClassName } from '../../StyledElement'
 import styles from './styles.module.css'
-import { convertPropsToClassName } from '../../StyledElement';
-import { FlexRow } from '../../FlexContainer';
 
 const Button = props => {
   const { disabled, type } = props

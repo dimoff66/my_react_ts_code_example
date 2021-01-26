@@ -7,7 +7,6 @@
   border-radius: 5px;
   background-color: #fff; 
   text-align: center; 
-  cursor: pointer;
   -webkit-user-select: none;
   display: flex;
   align-items: center;
@@ -23,7 +22,11 @@
   background-color: rgba(201, 206, 211, 0.808); 
 }
 
-.Button * {
+.Button:not([disabled]) {
+  cursor: pointer
+}
+
+.Button:not([disabled]) * {
   cursor: pointer;
 }
    
