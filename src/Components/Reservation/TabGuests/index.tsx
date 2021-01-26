@@ -17,11 +17,11 @@ import { ReservationType } from '../../../Classes/Reservation'
 import { GuestType } from '../../../Classes/Guest'
 
 // constants
-import { ACTIVE_GUESTS_SEARCH_TAB_PROP, ANONIMOUS_GUESTS_COUNT_PROP, GuestsListTab, GUESTS_SEARCH_TEXT_PROP } from '../constants'
+import { ACTIVE_GUESTS_SEARCH_TAB_PROP, ANONIMOUS_GUESTS_COUNT_PROP, GuestsListTab, GUESTS_SEARCH_TEXT_PROP, MAIN_GUEST_PROP } from '../constants'
 
 // styles
 import styles from './styles.module.css'
-const searchListElementStyle = { marginRight: 5, marginBottom: 5 }
+const searchListElementStyle = { marginRight: 10, marginBottom: 5 }
 
 // local types
 type Props = {
@@ -95,6 +95,7 @@ const TabGuests: FunctionComponent<Props> = ({ context, changeState }) => {
 
   const changeMainGuestFn = useCallback((guest: GuestType) => () => {
     changeReservation(valuesHolder.reservation!.replaceMainGuest(guest))
+    valuesHolder.changeState(MAIN_GUEST_PROP)(guest)
   }, [changeReservation]) 
 
   /////////////////////////////////////////////////
@@ -103,17 +104,21 @@ const TabGuests: FunctionComponent<Props> = ({ context, changeState }) => {
     guest: GuestType, 
     onClick?: () => void, 
     vertical?: boolean, 
-    addButton?: boolean, 
+    addButton?: 0 | 1 | 2, 
     menu?: boolean, 
     style?: Dict<any> 
   }) => {
-    const { guest, onClick, vertical = false, addButton = false, menu = false, style = {} } = elProps
+    const { guest, onClick, vertical = false, addButton = 0, menu = false, style = {} } = elProps
     const className = vertical ? styles.GuestCardVertical : styles.GuestCard
 
     let optionsControls 
     if (addButton) 
       optionsControls = 
-        <Button onClick={addGuestFn(guest)}>Add</Button>
+        <Button 
+          disabled={addButton === 2} 
+          onClick={addGuestFn(guest)}>
+            Add
+        </Button>
 
     else if (menu) 
       optionsControls = 
@@ -168,14 +173,18 @@ const TabGuests: FunctionComponent<Props> = ({ context, changeState }) => {
   
   , [reservation?.anonimousGuestsCount, changeAnonimousGuestsCount])
 
-  const guestsSearchList = useMemo(() => 
-    <FlexRow Grow ScrollableV FullWidth className={styles.GuestsSearchList}>
-      {guestsList.map(item => (<GuestCardEl 
-        vertical addButton guest={item} onClick={addGuestFn(item)} 
+  const guestsSearchList = useMemo(() => {
+    const partyIds = new Set(reservation!.party.map(v => v.id))
+
+    return <FlexRow Grow ScrollableV FullWidth className={styles.GuestsSearchList}>
+      {guestsList.map(item => (<GuestCardEl key={item.id}
+        addButton={partyIds.has(item.id) ? 2 : 1}
+        vertical guest={item} onClick={addGuestFn(item)} 
         style={searchListElementStyle}
       />))}
     </FlexRow>
-  , [guestsList])
+  }
+  , [guestsList, mainGuest, reservationGuests])
 
   ///////////////////////////////////////////////////////
   // Component
@@ -196,7 +205,11 @@ const TabGuests: FunctionComponent<Props> = ({ context, changeState }) => {
         />
         <div className={styles.GuestsSearchActionArea}>  
           {activeGuestsSearchTab === GuestsListTab.Party && 
-            <Button type='link' onClick={addPartyHandler}>{'ADD ALL'}</Button>
+            <Button type='link' 
+              disabled={!guestsList.length} 
+              onClick={addPartyHandler}>
+                {'ADD ALL'}
+            </Button>
           }
           {activeGuestsSearchTab === GuestsListTab.Search && 
             <input 

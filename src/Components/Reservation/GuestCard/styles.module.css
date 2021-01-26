@@ -8,6 +8,7 @@
 .GuestCard[data-vertical="true"] {
   width: 150px;
   height: 220px;
+  box-shadow: rgba(24, 36, 49, 0.61) 0px 8px 12px;
 }
 
 .GuestInfoLine>span {
