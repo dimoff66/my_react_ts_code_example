@@ -3,7 +3,7 @@ import { ACTION_SET_ATTRIBUTE, ACTIVE_GUESTS_SEARCH_TAB_PROP,
   CURRENT_TIMESLOT_PROP, CURRENT_VENUE_PROP, DATE_PROP, 
   GUESTS_LIST_PROP, SESSIONS_LIST_PROP, SHOW_AVAILABILITY_MODE_PROP, 
   TIMESLOTS_LIST_PROP, TIMESTAMP_PROP, GUESTS_SEARCH_TEXT_PROP,
-  TABLE_PROP} from './constants'
+  TABLE_PROP, MAIN_GUEST_PROP, GuestsListTab} from './constants'
 
 import { 
   getDefaultLayout, getDefaultSession, getDefaultTimestamp, 
@@ -65,9 +65,9 @@ const reducer: Reducer<ReservationComponentState, Action> = (state, action): Res
     }
 
   const setReservationProp = <K extends keyof ReservationType & WritableReservationProps>(key: K, value: ReservationType[K]) => {
-    if (value || !isEmpty(key)) {
-      reservation[key] = value
-    }  
+    if (value || !isEmpty(key)) 
+      if (reservation[key] !== value) 
+        reservation[key] = value  
   }
 
   const setEmpty = <K extends StateKey>(key: K) => {
@@ -82,7 +82,9 @@ const reducer: Reducer<ReservationComponentState, Action> = (state, action): Res
       }
         
       if (isChanged(ACTIVE_GUESTS_SEARCH_TAB_PROP, GUESTS_SEARCH_TEXT_PROP) || 
-        isEmpty(GUESTS_LIST_PROP)) {
+        isEmpty(GUESTS_LIST_PROP) ||
+        (isChanged(MAIN_GUEST_PROP) && context.activeGuestsSearchTab === GuestsListTab.Party)
+        ) {
           setProp(GUESTS_LIST_PROP)(getGuestsList(context))
       }
 

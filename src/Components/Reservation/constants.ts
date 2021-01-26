@@ -51,6 +51,7 @@ export enum GuestsListTab {
 export const TABLE_PROP = 'table'
 export const TIMESTAMP_PROP = 'timestamp'
 export const ANONIMOUS_GUESTS_COUNT_PROP = 'anonimousGuestsCount'
+export const MAIN_GUEST_PROP = 'mainGuest'
 
 export const FETCH_RESERVATIONS_PROP = 'fetchReservations'
 export const RESERVATIONS_LIST_PROP = 'reservationsList'
