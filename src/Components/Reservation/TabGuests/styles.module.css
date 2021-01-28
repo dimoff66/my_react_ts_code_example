@@ -22,7 +22,12 @@
 }
 
 .GuestCard {
-  border-bottom: black solid 2px;
+  border-bottom: rgba(59, 39, 77, 0.822) solid 2px;
+  border-radius: 5px;
+}
+
+.GuestCardVertical {
+  border-radius: 6px;
 }
 
 .AnonimousGuestsButton {
@@ -36,10 +41,5 @@
 
 .SearchInput, .SearchInput:focus {
   height: 25px;
-  padding: 2px 9px;
-  border-radius: 2px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  border: none;
-  border-bottom: 2px green solid;
+  width: 260px;
 }

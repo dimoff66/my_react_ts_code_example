@@ -8,6 +8,7 @@ import InfoBlock from '../../InfoBlock'
 import Menu from '../../Menu'
 import Tabs from '../../Tabs'
 import NumericInput from '../../NumericInput'
+import { TextField } from '@material-ui/core'
 
 // imported types
 import { Dict } from '../../../CommonTypes'
@@ -212,11 +213,12 @@ const TabGuests: FunctionComponent<Props> = ({ context, changeState }) => {
             </Button>
           }
           {activeGuestsSearchTab === GuestsListTab.Search && 
-            <input 
-              ref={searchInput}
+            <TextField ref={searchInput}
+              autoFocus
               placeholder={'type name or cabin number'}
+              helperText={guestsSearchText.length < 2 ? '(at least 2 characters)' : ''}
               className={styles.SearchInput} 
-              value={guestsSearchText} 
+              defaultValue={guestsSearchText} 
               onChange={guestsSearchTextChangeHandler} />
           }
         </div>
