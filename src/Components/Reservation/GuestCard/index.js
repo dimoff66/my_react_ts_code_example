@@ -49,8 +49,12 @@ const GuestCard = props => {
       <FirstLine /><SecondLine /><Requests />  
     </FlexColumn> 
 
+  const optionsAreaClass = !props.vertical ? styles.OptionsArea : styles.OptionsAreaVertical
+
   const OptionsArea = () => optionsControls 
-    ? <FlexColumn className={styles.Options}>{optionsControls}</FlexColumn>
+    ? <FlexColumn className={optionsAreaClass}>
+        {optionsControls}
+      </FlexColumn>
     : null
   
   return <StyledElement className={className} onClick={onClickHandler} {...restElementProps}>
