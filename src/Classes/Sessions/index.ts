@@ -35,9 +35,9 @@ export class SessionsType extends BasicClass<SessionsDataType, SessionsExtraData
     return session
   }
 
-  useDate (date: MomentType): SessionsType {
+  useDate (date: MomentType) {
     this.date = date.morningDate
-    return this.update() as SessionsType
+    return this.update()
   }
 }
 
