@@ -115,7 +115,8 @@ export const getDefaultSession = (context: ReservationComponentContext) => {
   const { sessions, date, timestamp, currentDateTime } = context 
   const currentPoint = timestamp || currentDateTime
   const session = sessions!.getClosestSession(
-    (currentPoint.isEqualDate(date) && currentPoint) || null
+    (currentPoint.isEqualDate(date) && currentPoint) || null,
+    (currentDateTime.isEqualDate(date) && currentDateTime) || null
   )
 
   return session

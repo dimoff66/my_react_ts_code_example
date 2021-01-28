@@ -27,14 +27,10 @@ export class SessionsType extends BasicClass<SessionsDataType, SessionsExtraData
 
   get id () { return this.sessions.map(v => v.id).join() }
 
-  getClosestSession (dateTime: MomentType | null) {
-    const date = dateTime?.morningDate
-    const session = this.sessions.find(
-      item => 
-        !date || 
-        item
-          .getDateTimeEnd(date)
-          .moreThan(dateTime!)
+  getClosestSession (dateTime: MomentType | null, currentDateTime: MomentType | null = null) {
+    const session = this.sessions.find(item => 
+      [dateTime, currentDateTime].every(date => 
+        !date || item.getDateTimeEnd(date).moreThan(date))    
     )
     return session
   }
