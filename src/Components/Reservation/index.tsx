@@ -115,12 +115,13 @@ const Reservation: React.FC<Props> = (props: Props) => {
       ].filter(([key]) => Boolean(key))
 
       const payload = _.fromPairs(pairs)
-      console.log('reservation state changes', payload)
       dispatch({ context, payload, type: ACTION_SET_ATTRIBUTE })
 
-      if (reservation.currentlyModified) {
-        props.changeReservation(reservation.update())
-      }
+      setTimeout(() => {
+        if (reservation.currentlyModified) {
+          props.changeReservation(reservation.update())
+        }
+      }, 0)  
     }, 
     [context, dispatch])
 
