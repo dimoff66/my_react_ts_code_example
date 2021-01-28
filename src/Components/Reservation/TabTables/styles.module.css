@@ -38,6 +38,11 @@
   color: whitesmoke;
 }
 
+.TimeslotButtonActive:not([disabled]):not(.menu):not(.link):hover {
+  background-color: rgb(116, 26, 134);
+  color: whitesmoke;
+}
+
 .TablesMapContainer {
   padding: 50px;
   background-color: rgb(174, 190, 174);

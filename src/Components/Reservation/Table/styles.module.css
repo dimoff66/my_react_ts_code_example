@@ -15,7 +15,7 @@
   cursor: pointer;  
 }
 
-.TableRoot[data-status="AVAILABLE"]:hover .Table {
+.TableRoot:not([data-selected="true"])[data-status="AVAILABLE"]:hover .Table {
   background-color: thistle;
   border-color: tomato;
 }
