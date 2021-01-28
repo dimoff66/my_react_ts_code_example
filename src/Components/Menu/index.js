@@ -2,11 +2,12 @@ import React from 'react'
 import MuiMenu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import onClickOutside from 'react-onclickoutside'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 import styles from './styles.module.css'
 import StyledElement, { convertPropsToClassName } from '../StyledElement';
 import Button from '../Buttons/Button'
+import MenuList from '@material-ui/core/MenuList'
 
 const Menu = props => {
   const {items, onClick: onClickHandler, ...elementProps} = 
@@ -19,29 +20,49 @@ const Menu = props => {
     setAnchorEl(null) 
   }
 
-  Menu.handleClickOutside = () => setAnchorEl(null)
+  const handleClickOutside = (e) => {
+    const getClassNames = (el, arr = []) => {
+      arr.push(el.className.toString())
+      if (el.parentElement && arr.length < 3) getClassNames(el.parentElement, arr)
+      return arr
+    }
+
+    const classNames = getClassNames(e.path[0])
+    if (classNames.some(n => n.includes('VertIconButton'))) return
+
+    setAnchorEl(null)
+  }
 
   return (
     <StyledElement ContentCenter {...elementProps}>
-      <Button type="menu"><MoreVertIcon  
-        className={styles.MenuIcon}
-        aria-controls="my-menu" 
-        aria-haspopup="true" 
-        onClick={handleClick} 
-      /></Button>
-  
-      <MuiMenu
-        id="my-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >{items.map(({ label, onClick }) => 
-          <MenuItem onClick={handleClose(onClick)}>
-            {label}
-          </MenuItem>
-          )}
-      </MuiMenu>
+      
+        <Button type="menu" className={styles.VertIconButton}>
+          <MoreVertIcon  
+            className={styles.MenuIcon}
+            aria-controls="my-menu" 
+            aria-haspopup="true" 
+            onClick={handleClick} 
+          />
+        </Button>
+      
+      
+        <MuiMenu
+          id="my-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <ClickAwayListener  onClickAway={handleClickOutside}>
+            <MenuList>
+              {items.map(({ label, onClick }) => 
+                <MenuItem onClick={handleClose(onClick)}>
+                  {label}
+                </MenuItem>
+              )}  
+            </MenuList>
+          </ClickAwayListener>
+        </MuiMenu>
     </StyledElement>
   );
 }

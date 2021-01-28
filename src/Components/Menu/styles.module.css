@@ -1,3 +1,7 @@
 .MenuIcon {
   cursor: pointer;
 }
+
+.VertIconButton {
+  padding: 8px 0
+}
