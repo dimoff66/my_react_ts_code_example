@@ -15,7 +15,7 @@
   border: solid 2px rgba(131, 93, 93, 0.445)
 }
 
-.DateButtonActive {
+.DateButtonActive, .DateButtonActive:not([disabled]):not(.menu):not(.link):hover {
   background-color: rgb(91, 46, 109);
   color: whitesmoke;
 }
@@ -33,12 +33,7 @@
   border-bottom: 1px solid rgb(118, 180, 180);
 }
 
-.TimeslotButtonActive {
-  background-color: rgb(116, 26, 134);
-  color: whitesmoke;
-}
-
-.TimeslotButtonActive:not([disabled]):not(.menu):not(.link):hover {
+.TimeslotButtonActive, .TimeslotButtonActive:not([disabled]):not(.menu):not(.link):hover {
   background-color: rgb(116, 26, 134);
   color: whitesmoke;
 }

@@ -2,7 +2,8 @@
   background-color: floralwhite;
 }
 
-.NewReservationButton {
+.NewReservationButton:not([mock="mock"]) {
   margin: 10px;
-  max-width: 150px;
+  max-width: 30px;
+  border-radius: 50%;
 }

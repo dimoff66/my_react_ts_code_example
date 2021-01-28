@@ -108,7 +108,7 @@ const App: React.FC<Props> = (props: Props) => {
       ? <ReservationComponent />
       : <>
           <Button onClick={createNewReservation} 
-            title="New reservation" 
+            title="New" 
             className={styles.NewReservationButton}
           />
 
