@@ -196,16 +196,20 @@ const TabTables: React.FC<Props> = ({ context, changeState }) => {
 
   const sailingDatesButtonsElement = useMemo(
     () => sailingDatesTabs.map(
-      ([item, title, opts]: ValueViewInfo) => 
+      ([item, title, opts]: ValueViewInfo) => {
+        const [dateString, monthString] = title.split(' ')
 
-        <Button 
+        return <Button 
           className={getDateButtonStyle(item)}
-          title={title} 
           value={item}
           disabled={opts?.disabled} 
-          onClick={onDateChange} />
-
-      ), [sailingDatesTabs, onDateChange, date])
+          onClick={onDateChange}>
+            <FlexColumn className={styles.SailingDateBlock}>
+              <FlexRow ContentCenter className={styles.SailingDateText}>{dateString}</FlexRow>
+              <FlexRow ContentCenter className={styles.SailingMonthText}>{monthString}</FlexRow>
+            </FlexColumn>
+          </Button>
+      }), [sailingDatesTabs, onDateChange, date])
 
   const timeslotsElement = useMemo(() => 
     showByVenue 

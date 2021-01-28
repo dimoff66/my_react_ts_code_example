@@ -65,7 +65,7 @@ export const getSailingDates = (context: ReservationComponentContext) => {
     .map(date => 
       [
         date, 
-        date.format('DD \n MMM'), 
+        date.format('DD MMM'), 
         { disabled: currentDate.moreThan(date) }
       ]
     )

@@ -10,8 +10,9 @@
 
 .DateButton {
   font-size: 12px;
-  color: rgb(109, 41, 109);
-  border: solid 1px violet
+  color: rgb(94, 138, 68);
+  background-color: rgb(250, 250, 253);
+  border: solid 2px rgba(131, 93, 93, 0.445)
 }
 
 .DateButtonActive {
@@ -23,7 +24,8 @@
   font-size: 16px;
   color: rgb(109, 41, 109);
   border-color: transparent;
-  border-bottom: 1px solid rgb(118, 180, 180);
+  border-bottom: 1px rgb(118, 180, 180);
+  border-bottom-style: dotted;
 }
 
 .TimeslotButton[disabled] {
@@ -39,7 +41,8 @@
 .TablesMapContainer {
   padding: 50px;
   background-color: rgb(174, 190, 174);
-  border-radius: 10px
+  border-radius: 10px;
+  box-shadow: 0px 0px 8px 4px rgba(34, 60, 80, 0.2);;
 }
 
 .VenueSelect+input {
@@ -49,3 +52,15 @@
 .VenueSelectIcon[class*="MuiSelect-icon"] {
   color: rgb(196, 252, 144)
 }
+
+.SailingDateBlock {
+  line-height: 11pt;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  letter-spacing: 2px;
+}
+
+.SailingDateText {
+  font-size: 16px;
+}
+
+
